@@ -1,0 +1,13 @@
+﻿.flashes {
+    background: #fff3cd;
+    color: #856404;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ffeeba;
+    border-radius: 5px;
+    list-style: none;
+}
+
+.flashes li {
+    margin: 5px 0;
+}

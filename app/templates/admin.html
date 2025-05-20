@@ -1,0 +1,79 @@
+﻿{% extends 'adminbase.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">📋 Section Management</h2>
+
+    <div class="mb-4">
+        <a href="{{ url_for('main.list_sections') }}" class="btn btn-outline-secondary">
+            🧩 Manage Sections
+        </a>
+    </div>
+    <h2 class="mb-4">📋 Board Management</h2>
+
+    <form method="POST" class="mb-4" role="form" aria-label="Create a new board">
+        <div class="input-group">
+            <label for="board_name" class="visually-hidden">Board Name</label>
+            <input id="board_name" name="board_name" type="text" class="form-control"
+                   placeholder="Enter a new board name" required>
+            <button type="submit" class="btn btn-primary">➕ Create Board</button>
+        </div>
+    </form>
+
+    <h4 class="mb-3">Your Boards</h4>
+    <ul class="list-group">
+        {% for board in boards %}
+        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+            <div class="me-3 mb-2 mb-md-0">{{ board.name }}</div>
+            <div class="text-end">
+                <div class="btn-group mb-1" role="group" aria-label="Board Actions">
+                    <a href="{{ url_for('main.show_board', board_id=board.id) }}" target="_blank"
+                       class="btn btn-sm btn-outline-secondary">
+                        👁️ Display
+                    </a>
+                    <a href="{{ url_for('main.edit_board', board_id=board.id) }}"
+                       class="btn btn-sm btn-outline-secondary">
+                        ✏️ Edit
+                    </a>
+                </div>
+                <div class="d-flex align-items-center">
+                    <small style="cursor: pointer;" class="text-muted d-block me-2"
+                           onclick="copyToClipboard('{{ request.host_url }}board/{{ board.id }}')"
+                           title="Copy URL">
+                        <code id="board-url-{{ board.id }}">{{ request.host_url }}board/{{ board.id }}</code>
+                    </small>
+                </div>
+            </div>
+        </li>
+        {% else %}
+        <li class="list-group-item">No boards yet. Create one above!</li>
+        {% endfor %}
+    </ul>
+
+
+    <form method="POST" action="{{ url_for('main.reset_db') }}"
+          onsubmit="return confirm('⚠️ This will ERASE ALL DATA and rebuild the database from scratch.\n\nAre you sure you want to proceed?');"
+          role="form" aria-label="Reset the database">
+
+        <button type="submit" class="btn btn-danger">
+            <strong>⚠️ Warning:</strong> Reset Database _ This will permanently delete all data and reset the system.
+        </button>
+    </form>
+
+
+</div>
+
+<script>
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                alert('📋 URL copied to clipboard!');
+            })
+            .catch(err => {
+                console.error('Failed to copy: ', err);
+                alert('⚠️ Failed to copy URL.');
+            });
+    }
+</script>
+
+
+{% endblock %}

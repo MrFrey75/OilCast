@@ -1,0 +1,56 @@
+﻿{% extends 'base.html' %}
+{% block content %}
+
+<div id="slideContainer">
+    {% for page in pages %}
+    <article class="slide" style="display: none;">
+        <h1 class="text-center">{{ page.title }}</h1>
+        {% for section in page.sections %}
+        <section class="mb-4">
+            {% if section.title %}
+            <h4>{{ section.title }}</h4>
+            {% endif %}
+            <div>{{ section.content | safe }}</div>
+        </section>
+        {% endfor %}
+    </article>
+    {% endfor %}
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    let index = 0;
+
+    function showSlide(i) {
+        slides.forEach((s) => {
+            s.style.opacity = 0;
+            s.style.display = 'none';
+        });
+
+        slides[i].style.display = 'block';
+        setTimeout(() => {
+            slides[i].style.opacity = 1;
+        }, 50);
+    }
+
+    showSlide(index);
+
+    const slideInterval = {
+    {
+        board.page_view_time * 1000
+    }
+    }
+    ;
+    setInterval(() => {
+        index = (index + 1) % slides.length;
+        showSlide(index);
+    }, slideInterval);
+</script>
+
+<style>
+    .slide {
+        transition: opacity 1s ease-in-out;
+        opacity: 0;
+    }
+</style>
+{% endblock %}

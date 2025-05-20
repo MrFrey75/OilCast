@@ -1,0 +1,45 @@
+﻿{% extends 'adminbase.html' %}
+{% block content %}
+<div class="container mt-4">
+
+
+    <!-- breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('main.admin') }}">Admin</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('main.edit_board', board_id=page.board.id) }}">Board</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Edit Parge</li>
+        </ol>
+    </nav>
+
+    <h2 class="mb-4">✏️ Edit Page</h2>
+
+    <form method="POST">
+        <div class="mb-3">
+            <label for="title" class="form-label">Page Title</label>
+            <input type="text" name="title" id="title" value="{{ page.name }}" class="form-control" required/>
+        </div>
+
+        <div class="mb-3">
+            <label for="order" class="form-label">Order</label>
+            <input type="number" name="order" id="order" value="{{ page.order }}" class="form-control"/>
+        </div>
+
+        <h4 class="mt-4">🧩 Select Sections for This Page</h4>
+        {% for section in available_sections %}
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="section{{ section.id }}" name="section_ids"
+                   value="{{ section.id }}"
+                   {% if section.id in current_section_ids %}checked{% endif %}>
+            <label class="form-check-label" for="section{{ section.id }}">
+                {{ section.title or "Untitled Section" }}
+            </label>
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary mt-3">💾 Save Changes</button>
+        <a href="{{ url_for('main.admin') }}" class="btn btn-secondary mt-3">🔙 Back</a>
+    </form>
+</div>
+{% endblock %}

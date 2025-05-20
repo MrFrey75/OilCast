@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}OilProjector Admin{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    {% block head %}{% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+    <a class="navbar-brand" href="/">OilProjector Admin</a>
+</nav>
+<main class="container py-4">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div id="flash-alert" class="alert alert-info alert-dismissible fade show" role="alert">
+        {% for message in messages %}
+        <div>{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</main>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const flash = document.getElementById("flash-alert");
+        if (flash) {
+            setTimeout(() => {
+                flash.classList.remove("show");
+                flash.classList.add("fade");
+                setTimeout(() => flash.remove(), 1000); // Wait for CSS fade-out
+            }, 3000); // 10 seconds
+        }
+    });
+</script>
+
+
+</html>

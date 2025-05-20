@@ -1,0 +1,69 @@
+﻿{% extends 'adminbase.html' %}
+{% block content %}
+<div class="container mt-4">
+    <!-- breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('main.admin') }}">Admin</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit Board</li>
+        </ol>
+    </nav>
+
+    <h2 class="mb-4">🛠️ Editing Board: {{ board.name }}</h2>
+
+    <h3>Board Options</h3>
+    <form method="POST" action="{{ url_for('main.update_board', board_id=board.id) }}">
+        <div class="mb-3">
+            <label for="name" class="form-label">Board Name</label>
+            <input type="text" name="name" id="name" value="{{ board.name }}" class="form-control" required/>
+            <div class="mb-3">
+                <label for="page_view_time" class="form-label">Page View Time</label>
+                <input type="text" name="page_view_time" id="page_view_time" value="{{ board.page_view_time }}"
+                       class="form-control" required/>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+        <a href="{{ url_for('main.admin') }}" class="btn btn-secondary">🔙 Back</a>
+    </form>
+
+
+    <form method="POST" class="mb-4">
+        <button type="submit" class="btn btn-success">➕ Add Page</button>
+    </form>
+
+    <hr>
+
+    <h3 class="mb-3">📄 Existing Pages</h3>
+    <ol class="list-group list-group-numbered">
+        {% for page in board.pages|sort(attribute='order') %}
+        <li class="list-group-item">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <strong>{{ page.name }}</strong>
+                </div>
+                <div>
+                    <span class="badge bg-secondary">Order: {{ page.order }}</span>
+                </div>
+                <div class="text-end">
+                    <a href="{{ url_for('main.edit_page', page_id=page.id) }}"
+                       class="btn btn-sm btn-outline-primary mb-2">✏️ Edit</a>
+                    <form action="{{ url_for('main.delete_page', page_id=page.id) }}" method="POST"
+                          onsubmit="return confirm('Delete this page?');">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">🗑️ Delete</button>
+                    </form>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ol>
+</div>
+
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: 'textarea#pageContent',
+        menubar: false,
+        height: 300
+    });
+</script>
+{% endblock %}
